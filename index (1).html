@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Like — Connect. Share. Discover.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:        #1E1826;
+    --bg-deep:   #150F1C;
+    --panel:     #251E30;
+    --gold:      #D9A85C;
+    --gold-soft: #E7C382;
+    --coral:     #C96A46;
+    --cream:     #F3ECE1;
+    --muted:     #B4A9C2;
+    --line:      rgba(243,236,225,0.14);
+    --serif: "Fraunces", Georgia, serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--cream);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img,svg{ display:block; max-width:100%; }
+
+  a{ color:inherit; }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  h1,h2,h3{
+    font-family:var(--serif);
+    font-weight:500;
+    line-height:1.08;
+    margin:0;
+    color:var(--cream);
+  }
+
+  :focus-visible{
+    outline:2px solid var(--gold-soft);
+    outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(30,24,38,0.72);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:var(--serif);
+    font-size:22px;
+    letter-spacing:0.01em;
+  }
+  .nav-links{
+    display:flex; gap:36px; list-style:none; margin:0; padding:0;
+    font-size:14.5px; color:var(--muted);
+  }
+  .nav-links a{ text-decoration:none; transition:color .2s; }
+  .nav-links a:hover{ color:var(--cream); }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 22px;
+    border-radius:100px;
+    font-size:14.5px;
+    font-weight:500;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .18s ease, background .2s ease, border-color .2s ease;
+    font-family:var(--sans);
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-solid{ background:var(--gold); color:#241A0E; }
+  .btn-solid:hover{ background:var(--gold-soft); }
+  .btn-line{ border-color:var(--line); color:var(--cream); background:transparent; }
+  .btn-line:hover{ border-color:var(--gold-soft); }
+  .nav-cta{ display:flex; gap:12px; align-items:center; }
+  @media (max-width:860px){ .nav-links{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 60px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    align-items:center;
+  }
+  .eyebrow-free-tag{
+    color:var(--gold-soft);
+    font-size:14.5px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(40px,5vw,60px);
+    max-width:9.5em;
+  }
+  .hero p.lede{
+    margin-top:22px;
+    max-width:38ch;
+    color:var(--muted);
+    font-size:17.5px;
+  }
+  .hero-ctas{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+
+  .hero-visual{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:420px;
+  }
+  .hero-circle-frame{
+    position:relative;
+    width:min(72vw,440px);
+    aspect-ratio:1/1;
+    margin-right:-60px;
+  }
+  .hero-circle{
+    width:100%; height:100%;
+    border-radius:50%;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,0.6);
+  }
+  .scene{
+    position:absolute; inset:0;
+    opacity:0;
+    transition:opacity .6s ease;
+  }
+  .scene.active{ opacity:1; }
+  .scene .base{
+    position:absolute; inset:0;
+  }
+  .scene1 .base{ background:radial-gradient(120% 120% at 78% 40%, #F4D9A0 0%, #E1A65C 30%, #B96A3E 55%, #3A2130 82%, #1B1220 100%); }
+  .scene2 .base{ background:radial-gradient(120% 120% at 30% 70%, #F0C583 0%, #D98A54 32%, #A64F42 58%, #2E1B2A 84%, #150F1C 100%); }
+  .scene3 .base{ background:radial-gradient(120% 120% at 60% 25%, #F6E2AE 0%, #DDA766 28%, #B4593F 55%, #351E2C 82%, #170F1D 100%); }
+  .scene .silhouette{
+    position:absolute;
+    width:70%; height:110%;
+    left:-8%; top:-6%;
+    background:radial-gradient(closest-side, rgba(10,6,12,0.92), rgba(10,6,12,0) 72%);
+    filter:blur(2px);
+  }
+  .scene .grain{
+    position:absolute; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size:3px 3px;
+    mix-blend-mode:overlay;
+    opacity:.5;
+  }
+  .hero-arrow{
+    position:absolute;
+    right:6%;
+    top:50%;
+    transform:translateY(-50%);
+    width:38px; height:38px;
+    border-radius:50%;
+    background:rgba(243,236,225,0.92);
+    color:#241A0E;
+    display:flex; align-items:center; justify-content:center;
+    border:none; cursor:pointer;
+    transition:transform .18s ease;
+  }
+  .hero-arrow:hover{ transform:translateY(-50%) scale(1.08); }
+  .hero-dots{
+    position:absolute;
+    bottom:-30px; left:50%; transform:translateX(-50%);
+    display:flex; gap:8px;
+  }
+  .hero-dots button{
+    width:6px; height:6px; border-radius:50%;
+    border:none; padding:0; cursor:pointer;
+    background:rgba(243,236,225,0.3);
+    transition:background .2s, width .2s;
+  }
+  .hero-dots button.active{ background:var(--gold-soft); width:18px; border-radius:4px; }
+
+  @media (max-width:900px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-visual{ order:-1; margin-bottom:8px; }
+    .hero-circle-frame{ margin-right:0; width:min(80vw,340px); }
+    .hero p.lede{ max-width:none; }
+  }
+
+  /* ---------- FEATURES ---------- */
+  .section{ padding:100px 0; }
+  .section-head{ max-width:34ch; margin-bottom:56px; }
+  .section-head h2{ font-size:clamp(28px,3vw,38px); }
+  .section-head p{ color:var(--muted); margin-top:14px; font-size:16px; }
+
+  .feature-row{
+    display:grid;
+    grid-template-columns:64px 1fr auto;
+    gap:24px;
+    align-items:center;
+    padding:26px 0;
+    border-top:1px solid var(--line);
+  }
+  .feature-row:last-child{ border-bottom:1px solid var(--line); }
+  .feature-mark{
+    width:44px; height:44px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--gold) 0%, var(--coral) 100%);
+    flex-shrink:0;
+  }
+  .feature-row h3{
+    font-size:19px;
+    font-weight:500;
+    font-family:var(--sans);
+    color:var(--cream);
+  }
+  .feature-row p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:15px;
+    max-width:46ch;
+  }
+  .feature-row .idx{
+    font-family:var(--serif);
+    font-size:14px;
+    color:var(--muted);
+    justify-self:end;
+  }
+  @media (max-width:640px){
+    .feature-row{ grid-template-columns:44px 1fr; }
+    .feature-row .idx{ display:none; }
+  }
+
+  /* ---------- STATEMENT PANEL ---------- */
+  .statement{
+    background:linear-gradient(180deg, var(--panel), var(--bg-deep));
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:120px 0;
+    text-align:center;
+  }
+  .statement h2{
+    font-size:clamp(30px,4.2vw,46px);
+    font-weight:400;
+    max-width:16em;
+    margin:0 auto;
+    color:var(--gold-soft);
+  }
+
+  /* ---------- WHY LIKE ---------- */
+  .traits{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+  }
+  .trait{
+    flex:1 1 180px;
+    padding:28px 24px 28px 0;
+    border-left:1px solid var(--line);
+    padding-left:24px;
+  }
+  .trait:first-child{ border-left:none; padding-left:0; }
+  .trait h3{
+    font-family:var(--serif);
+    font-size:21px;
+    font-weight:500;
+    color:var(--cream);
+  }
+  .trait p{
+    color:var(--muted);
+    font-size:14.5px;
+    margin-top:8px;
+  }
+  @media (max-width:760px){
+    .traits{ flex-direction:column; }
+    .trait{ border-left:none; border-top:1px solid var(--line); padding:24px 0; }
+    .trait:first-child{ border-top:none; }
+  }
+
+  /* ---------- DOWNLOAD BAND ---------- */
+  .download-band{
+    text-align:center;
+    padding:110px 0;
+  }
+  .download-band h2{ font-size:clamp(30px,4vw,44px); }
+  .download-band .tagline{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--gold-soft);
+    margin-top:14px;
+    font-size:18px;
+  }
+  .store-row{
+    display:flex; justify-content:center; gap:16px;
+    margin-top:38px; flex-wrap:wrap;
+  }
+  .store-btn{
+    display:flex; align-items:center; gap:10px;
+    padding:13px 24px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    text-decoration:none;
+    color:var(--cream);
+    font-size:14px;
+    transition:border-color .2s;
+  }
+  .store-btn:hover{ border-color:var(--gold-soft); }
+  .store-btn small{ display:block; color:var(--muted); font-size:11px; }
+  .store-btn strong{ font-size:15px; font-weight:600; }
+
+  /* ---------- PRIVACY ---------- */
+  .privacy{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+    padding:100px 0;
+    border-top:1px solid var(--line);
+  }
+  .privacy-visual{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:22px;
+    background:
+      radial-gradient(140% 140% at 15% 20%, rgba(217,168,92,0.35), transparent 55%),
+      linear-gradient(160deg, var(--panel), var(--bg-deep));
+    border:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  .privacy-visual::after{
+    content:"";
+    position:absolute;
+    width:130px; height:130px;
+    border-radius:50%;
+    border:1px solid var(--gold-soft);
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    opacity:.5;
+  }
+  .privacy h2{ font-size:clamp(26px,3.2vw,34px); }
+  .privacy p{ color:var(--muted); margin-top:16px; max-width:42ch; }
+  .privacy .control-line{
+    margin-top:22px;
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--gold-soft);
+    font-size:18px;
+  }
+  @media (max-width:800px){
+    .privacy{ grid-template-columns:1fr; }
+    .privacy-visual{ order:-1; }
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq{ padding:100px 0; border-top:1px solid var(--line); }
+  details{
+    border-bottom:1px solid var(--line);
+    padding:22px 0;
+  }
+  details:first-of-type{ border-top:1px solid var(--line); }
+  summary{
+    cursor:pointer;
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--serif);
+    font-size:19px;
+    color:var(--cream);
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary .plus{
+    font-size:22px;
+    color:var(--gold-soft);
+    transition:transform .25s ease;
+    font-family:var(--sans);
+  }
+  details[open] summary .plus{ transform:rotate(45deg); }
+  details p{
+    color:var(--muted);
+    margin:14px 0 0;
+    max-width:60ch;
+    font-size:15.5px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:48px 0 40px;
+  }
+  .footer-row{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:20px;
+  }
+  .footer-logo{ font-family:var(--serif); font-size:19px; }
+  .footer-links{
+    display:flex; gap:24px; list-style:none; padding:0; margin:0;
+    font-size:13.5px; color:var(--muted);
+  }
+  .footer-links a{ text-decoration:none; }
+  .footer-links a:hover{ color:var(--cream); }
+  .copyright{
+    color:var(--muted); font-size:13px; margin-top:28px;
+  }
+
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <div class="logo">Like</div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#why">Why Like</a></li>
+      <li><a href="#privacy">Privacy</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#download" class="btn btn-line">Get started</a>
+      <a href="#download" class="btn btn-solid">Download Like</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow-free-tag">Your world. Your people.</div>
+        <h1>Connect. Share.<br>Discover.</h1>
+        <p class="lede">Create your profile, share photos and videos, follow the people you enjoy, and find something new every day.</p>
+        <div class="hero-ctas">
+          <a href="#download" class="btn btn-solid">Download Like</a>
+          <a href="#features" class="btn btn-line">See what's inside</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-circle-frame">
+          <div class="hero-circle" role="group" aria-label="Moments shared on Like">
+            <div class="scene scene1 active"><div class="base"></div><div class="silhouette"></div><div class="grain"></div></div>
+            <div class="scene scene2"><div class="base"></div><div class="silhouette"></div><div class="grain"></div></div>
+            <div class="scene scene3"><div class="base"></div><div class="silhouette"></div><div class="grain"></div></div>
+          </div>
+          <button class="hero-arrow" id="heroNext" aria-label="Show next moment">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#241A0E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="hero-dots" id="heroDots">
+            <button class="active" aria-label="Moment 1"></button>
+            <button aria-label="Moment 2"></button>
+            <button aria-label="Moment 3"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Everything you love, in one place</h2>
+        <p>Whether you're posting your latest photo or catching up with friends, Like keeps your social world close.</p>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-row">
+          <div class="feature-mark"></div>
+          <div><h3>Share your moments</h3><p>Post photos, videos, and updates with the people who matter to you.</p></div>
+          <span class="idx">01</span>
+        </div>
+        <div class="feature-row">
+          <div class="feature-mark"></div>
+          <div><h3>Like and react</h3><p>Show appreciation for posts you enjoy and interact with your community.</p></div>
+          <span class="idx">02</span>
+        </div>
+        <div class="feature-row">
+          <div class="feature-mark"></div>
+          <div><h3>Connect with people</h3><p>Follow friends, creators, and interesting profiles. Build your own circle.</p></div>
+          <span class="idx">03</span>
+        </div>
+        <div class="feature-row">
+          <div class="feature-mark"></div>
+          <div><h3>Discover new content</h3><p>Explore fresh posts and find people, ideas, and trends that match what you're into.</p></div>
+          <span class="idx">04</span>
+        </div>
+        <div class="feature-row">
+          <div class="feature-mark"></div>
+          <div><h3>Stay connected</h3><p>Comment and join conversations with your community, wherever you are.</p></div>
+          <span class="idx">05</span>
+        </div>
+        <div class="feature-row">
+          <div class="feature-mark"></div>
+          <div><h3>Never miss a moment</h3><p>Get notified when people interact with your posts and profile.</p></div>
+          <span class="idx">06</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement">
+    <div class="wrap">
+      <h2>Share what you love. Discover what inspires you. Connect with your world.</h2>
+    </div>
+  </section>
+
+  <!-- WHY LIKE -->
+  <section class="section" id="why">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Why Like</h2>
+      </div>
+      <div class="traits">
+        <div class="trait"><h3>Simple</h3><p>An easy, uncluttered social experience.</p></div>
+        <div class="trait"><h3>Creative</h3><p>Express yourself through photos, videos, and posts.</p></div>
+        <div class="trait"><h3>Connected</h3><p>Stay close to friends and your community.</p></div>
+        <div class="trait"><h3>Discoverable</h3><p>Find new content and people worth following.</p></div>
+        <div class="trait"><h3>Fun</h3><p>Built around interaction, sharing, and everyday moments.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section class="download-band" id="download">
+    <div class="wrap">
+      <h2>Your feed. Your community. Your Like.</h2>
+      <div class="tagline">Create. Share. Connect. Repeat.</div>
+      <div class="store-row">
+        <a href="#" class="store-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16.365 1.43c0 1.14-.415 2.06-1.245 2.87-.83.81-1.83 1.28-3 1.14-.06-1.06.36-2.06 1.2-2.9.83-.84 1.86-1.31 2.99-1.11.03.03.05.03.05 0v.001zM20.68 17.02c-.52 1.2-.77 1.74-1.44 2.79-.94 1.47-2.27 3.31-3.9 3.32-1.45.02-1.83-.94-3.8-.94-1.97 0-2.39.92-3.84.96-1.65.06-2.91-1.6-3.85-3.07-2.1-3.24-2.34-7.04-1.03-9.06.93-1.44 2.4-2.28 3.78-2.28 1.4 0 2.28.95 3.44.95 1.13 0 1.81-.95 3.44-.95 1.24 0 2.55.68 3.48 1.85-3.06 1.68-2.56 6.07.72 6.43z" fill="var(--cream)"/></svg>
+          <span><small>Download on the</small><strong>App Store</strong></span>
+        </a>
+        <a href="#" class="store-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.6 2.6c-.4.4-.6.9-.6 1.6v15.6c0 .7.2 1.2.6 1.6l.1.1L13 12l-9.3-9.3-.1-.1z" fill="var(--gold)"/><path d="M16.1 15.1L13 12l3.1-3.1 3.9 2.2c1 .6 1 1.8 0 2.4l-3.9 2.2z" fill="var(--coral)"/><path d="M16.1 15.1L13 12 3.7 21.3c.4.4 1 .5 1.7.1l10.7-6.3z" fill="var(--cream)"/><path d="M16.1 8.9L5.4 2.6c-.7-.4-1.3-.3-1.7.1L13 12l3.1-3.1z" fill="var(--gold-soft)"/></svg>
+          <span><small>Get it on</small><strong>Google Play</strong></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="privacy wrap" id="privacy">
+    <div class="privacy-visual" aria-hidden="true"></div>
+    <div>
+      <h2>Your privacy matters</h2>
+      <p>Like is built with privacy and account security in mind, so you can focus on connecting and sharing instead of worrying about your data.</p>
+      <div class="control-line">Your account. Your content. Your control.</div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq wrap" id="faq">
+    <div class="section-head">
+      <h2>Common questions</h2>
+    </div>
+
+    <details open>
+      <summary>What is Like?<span class="plus">+</span></summary>
+      <p>Like is a social media app where you can share content, connect with people, follow profiles, and discover new posts.</p>
+    </details>
+    <details>
+      <summary>Is Like free to use?<span class="plus">+</span></summary>
+      <p>Like is free to download and use, with optional premium features planned for the future.</p>
+    </details>
+    <details>
+      <summary>What can I share on Like?<span class="plus">+</span></summary>
+      <p>Photos, videos, and posts today — with more formats and story-style updates on the way.</p>
+    </details>
+    <details>
+      <summary>How do I create an account?<span class="plus">+</span></summary>
+      <p>Download Like, set up your profile, and start connecting with your community in a couple of minutes.</p>
+    </details>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="footer-logo">Like</div>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="copyright">© 2026 Like. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var scenes = document.querySelectorAll('.scene');
+    var dots = document.querySelectorAll('#heroDots button');
+    var nextBtn = document.getElementById('heroNext');
+    var current = 0;
+
+    function show(i){
+      scenes.forEach(function(s,idx){ s.classList.toggle('active', idx === i); });
+      dots.forEach(function(d,idx){ d.classList.toggle('active', idx === i); });
+      current = i;
+    }
+
+    nextBtn.addEventListener('click', function(){
+      show((current + 1) % scenes.length);
+    });
+
+    dots.forEach(function(dot, i){
+      dot.addEventListener('click', function(){ show(i); });
+    });
+  })();
+</script>
+
+</body>
+</html>
